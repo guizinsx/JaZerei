@@ -13,7 +13,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 //criar migration yarn prisma migrate dev
 model User {
   id        String   @id @default(uuid()) 
@@ -21,8 +20,8 @@ model User {
   email     String   @unique @db.VarChar(100)
   password  String?  // Nullable se usar login com steam
   steamId   String?  // Nullable se o usuario nao conectar com a steam
-  createdAt DateTime? @default(now())
-  updatedAt DateTime? @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   games UserGame[]
 
@@ -30,16 +29,26 @@ model User {
 }
 
 model Game {
-  id          String   @id @default(uuid()) 
-  steamGameId String?  @unique // Caso o jogo da Steam seja único
-  title       String   @db.VarChar(200)
-  description String?
-  imageUrl    String?
-  releaseDate DateTime?
+  id            String        @id @default(uuid()) 
+  steamGameId   String?       @unique // Caso o jogo da Steam seja único
+  title         String        @db.VarChar(200)
+  description   String?
+  imageUrl      String?
+  releaseDate   DateTime?
+  categoryId    String?
+  category      GameCategory? @relation(fields: [categoryId], references: [id]) // Relacionamento com GameCategory
 
   users UserGame[]
 
   @@map("games")
+}
+
+model GameCategory {
+  id        String   @id @default(uuid())
+  name      String   @unique @db.VarChar(50) // Nome da categoria (RPG, Ação, etc.)
+  games     Game[]
+
+  @@map("game_categories")
 }
 
 model UserGame {
