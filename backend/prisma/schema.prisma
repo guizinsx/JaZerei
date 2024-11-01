@@ -61,8 +61,10 @@ model UserGame {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  @@unique([userId, gameId])  // Chave composta para userId e gameId
   @@map("usergames")
 }
+
 
 enum GameStatus {
   ZERANDO
