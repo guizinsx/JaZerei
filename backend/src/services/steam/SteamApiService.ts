@@ -3,11 +3,20 @@ import axios from 'axios';
 const STEAM_API_URL = 'http://api.steampowered.com';
 const STEAM_STORE_API_URL = 'https://store.steampowered.com/api';
 
+interface SteamAppListResponse {
+    applist: {
+        apps: {
+            appid: number;
+            name: string;
+        }[];
+    };
+}
+
 class SteamApiService {
-    static async fetchGameList() {
+    static async fetchGameList(): Promise<SteamAppListResponse['applist']['apps']> {
         try {
-            const response = await axios.get(`${STEAM_API_URL}/ISteamApps/GetAppList/v0002/`, {
-                params: { format: 'json' } 
+            const response = await axios.get<SteamAppListResponse>(`${STEAM_API_URL}/ISteamApps/GetAppList/v0002/`, {
+                params: { format: 'json' }
             });
 
             return response.data.applist.apps;
@@ -35,7 +44,7 @@ class SteamApiService {
     }
 
     static async fetchPopularGameDetails(appIds: number[]) {
-        console.log("Received appIds:", appIds); 
+        console.log("Received appIds:", appIds);
         try {
             const gameDetails = await Promise.all(appIds.map(async (appid) => {
                 try {
@@ -45,7 +54,7 @@ class SteamApiService {
                     return response.data[appid].success ? response.data[appid].data : null;
                 } catch (error) {
                     console.error(`Error fetching details for game ${appid}:`, error.message);
-                    return null; 
+                    return null;
                 }
             }));
             return gameDetails.filter((game) => game !== null);
