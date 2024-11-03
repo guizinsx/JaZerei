@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import SteamApiService from '../../services/steam/SteamApiService';
 
 class SteamGameController {
-    private popularAppIds: number[] = [10, 570940, 440, 304930, 578080];
+    private popularAppIds: number[] = [10, 570, 440, 304930, 578080];
 
     async fetchGames(req: Request, res: Response) {
         try {
@@ -37,12 +37,33 @@ class SteamGameController {
     }
 
     async fetchPopularGames(req: Request, res: Response) {
+        console.log('Starting fetchPopularGames with popularAppIds:', this.popularAppIds);
+
         try {
             const games = await SteamApiService.fetchPopularGameDetails(this.popularAppIds);
             return res.json(games);
         } catch (error) {
-            console.error(error.message);
+            console.error('Error fetching popular games:', error.message);
             return res.status(500).json({ error: 'Error fetching popular Steam games.', details: error.message });
+        }
+    }
+
+    async searchGames(req: Request, res: Response) {
+        const { query } = req.params;
+        
+        if (query.length < 3) {
+            return res.status(400).json({ error: "Search term must be at least 3 characters." });
+        }
+
+        try {
+            const games = await SteamApiService.fetchGameList();
+            const filteredGames = games.filter(game =>
+                game.name.toLowerCase().includes(query.toLowerCase())
+            );
+            return res.json(filteredGames);
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ error: "Error searching Steam games.", details: error.message });
         }
     }
 }

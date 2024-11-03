@@ -3,23 +3,15 @@ import axios from 'axios';
 const STEAM_API_URL = 'http://api.steampowered.com';
 const STEAM_STORE_API_URL = 'https://store.steampowered.com/api';
 
-interface SteamAppListResponse {
-    applist: {
-        apps: {
-            appid: number;
-            name: string;
-        }[];
-    };
-}
-
 class SteamApiService {
-    static async fetchGameList(): Promise<SteamAppListResponse['applist']['apps']> {
+    static async fetchGameList() {
         try {
-            const response = await axios.get<SteamAppListResponse>(`${STEAM_API_URL}/ISteamApps/GetAppList/v0002/`, {
+            const response = await axios.get(`${STEAM_API_URL}/ISteamApps/GetAppList/v0002/`, {
                 params: { format: 'json' }
             });
 
-            return response.data.applist.apps;
+            const validGames = response.data.applist.apps.filter((game: any) => game.name);
+            return validGames;
         } catch (error) {
             console.error('Error fetching Steam game list:', error);
             throw new Error('Error fetching Steam game list');
@@ -32,19 +24,26 @@ class SteamApiService {
                 params: { appids: appid }
             });
 
-            if (response.data[appid].success) {
+            if (response.data[appid]?.success) {
                 return response.data[appid].data;
             } else {
-                throw new Error(`Could not find details for appid: ${appid}`);
+                console.warn(`No valid details found for appid: ${appid}`);
+                return null;
             }
         } catch (error) {
-            console.error(`Error fetching details for game ${appid} from Steam:`, error);
-            throw new Error(`Error fetching details for game ${appid}`);
+            console.error(`Error fetching details for game ${appid}:`, error);
+            return null;
         }
     }
 
-    static async fetchPopularGameDetails(appIds: number[]) {
-        console.log("Received appIds:", appIds);
+    static async fetchPopularGameDetails(appIds: number[] = []) {
+        if (!appIds.length) {
+            console.error('No appIds provided for fetching popular game details.');
+            return [];
+        }
+    
+        console.log('Starting fetchPopularGameDetails with appIds:', appIds);
+    
         try {
             const gameDetails = await Promise.all(appIds.map(async (appid) => {
                 try {

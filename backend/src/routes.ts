@@ -31,9 +31,10 @@ router.post('/category', isAuthenticated, new CreateCategoryController().handle)
 router.get('/category', isAuthenticated, new ListCategoryController().handle);
 
 // -- ROTAS STEAM GAMES --
-router.get('/steam-games', isAuthenticated, steamGameController.fetchGames); // Listar todos os jogos da Steam
-router.get('/steam-games/:appid', isAuthenticated, steamGameController.fetchGameDetails); // Detalhes de um jogo específico
-router.get('/popular-games', isAuthenticated, steamGameController.fetchPopularGames); // Detalhes de jogos populares
+router.get('/steam-games', isAuthenticated, new SteamGameController().fetchGames); // Listar todos os jogos da Steam
+router.get('/steam-games/search/:query', isAuthenticated, new SteamGameController().searchGames); // Buscar jogos por termo
+router.get('/steam-games/:appid', isAuthenticated, new SteamGameController().fetchGameDetails); // Detalhes de um jogo específico
+router.get('/popular-games', isAuthenticated, steamGameController.fetchPopularGames.bind(steamGameController)); // Detalhes de jogos populares
 
 // -- ROTAS CATEGORY - GAME --
 router.post('/game', isAuthenticated, new CreateGameController().handle);
