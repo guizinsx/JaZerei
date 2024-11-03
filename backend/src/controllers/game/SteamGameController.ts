@@ -49,12 +49,12 @@ class SteamGameController {
     }
 
     async searchGames(req: Request, res: Response) {
-        const { query } = req.params;
-        
-        if (query.length < 3) {
+        const { query } = req.query as { query: string }; 
+    
+        if (!query || query.length < 3) {
             return res.status(400).json({ error: "Search term must be at least 3 characters." });
         }
-
+    
         try {
             const games = await SteamApiService.fetchGameList();
             const filteredGames = games.filter(game =>

@@ -32,8 +32,8 @@ router.get('/category', isAuthenticated, new ListCategoryController().handle);
 
 // -- ROTAS STEAM GAMES --
 router.get('/steam-games', isAuthenticated, new SteamGameController().fetchGames); // Listar todos os jogos da Steam
-router.get('/steam-games/search/:query', isAuthenticated, new SteamGameController().searchGames); // Buscar jogos por termo
-router.get('/steam-games/:appid', isAuthenticated, new SteamGameController().fetchGameDetails); // Detalhes de um jogo específico
+router.get('/steam-games/search',  isAuthenticated, steamGameController.searchGames.bind(steamGameController));
+router.get('/steam-games/:appid', isAuthenticated, steamGameController.searchGames.bind(steamGameController)); // Detalhes de um jogo específico
 router.get('/popular-games', isAuthenticated, steamGameController.fetchPopularGames.bind(steamGameController)); // Detalhes de jogos populares
 
 // -- ROTAS CATEGORY - GAME --
