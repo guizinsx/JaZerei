@@ -1,6 +1,6 @@
-import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
-import axios from 'axios'
+import styles from './styles.module.scss';
+import { api } from '@/services/api';
+import { getCookieServer } from '@/lib/cookieServer';
 
 interface GameDetails {
     name: string;
@@ -11,29 +11,34 @@ interface GameDetails {
     release_date: string;
 }
 
-export default function JogosDetalhes() {
-    const router = useRouter();
-    const { appid } = router.query;
-    const [game, setGame] = useState<GameDetails | null>(null);
+interface JogosDetalhesProps {
+    searchParams: { appid: string };
+}
 
-    useEffect(() => {
-        if (appid) {
-            axios.get(`/steam-games/${appid}`)
-                .then((response) => setGame(response.data))
-                .catch((error) => console.error('Error fetching game details:', error));
-        }
-    }, [appid]);
+export default async function JogosDetalhes({ searchParams }: JogosDetalhesProps) {
+    const { appid } = searchParams;
+    const token = await getCookieServer();
 
-    if (!game) return <p>Loading...</p>;
+    const response = await api.get(`/steam-games/${appid}`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
+    const game: GameDetails = response.data;
 
     return (
-        <main>
-            <h1>{game.name}</h1>
-            <img src={game.header_image} alt={game.name} style={{ maxWidth: '100%' }} />
-            <p><strong>Description:</strong> {game.description}</p>
-            <p><strong>Price:</strong> {game.price}</p>
-            <p><strong>Release Date:</strong> {game.release_date}</p>
-            <p><strong>Categories:</strong> {game.categories.join(', ')}</p>
+        <main className={styles.container}>
+            <div className={styles.imageWrapper}>
+                <img src={game.header_image} alt={game.name} className={styles.headerImage} />
+            </div>
+            <h1 className={styles.title}>{game.name}</h1>
+            <p className={styles.description}>{game.description}</p>
+            <div className={styles.details}>
+                <p><strong>Price:</strong> {game.price}</p>
+                <p><strong>Release Date:</strong> {game.release_date}</p>
+                <p><strong>Categories:</strong> {game.categories.join(', ')}</p>
+            </div>
         </main>
     );
 }

@@ -32,7 +32,7 @@ export async function Jogos() {
 
             <section className={styles.popularGames}>
                 {popularGames.map((game) => (
-                    <Link key={game.steam_appid} href={`/jogosDetalhes?appid=${game.steam_appid}`}>
+                    <Link key={game.steam_appid} href={`/dashboard/JogosDetalhes?appid=${game.steam_appid}`}>
                         <div className={styles.jogoItem}>
                             <img src={game.header_image} alt={game.name} className={styles.gameImage} />
                             <span>{game.name}</span>
