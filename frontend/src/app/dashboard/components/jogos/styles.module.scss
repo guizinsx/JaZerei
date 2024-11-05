@@ -1,58 +1,60 @@
-
-.container{
+.container {
     max-width: 720px;
     margin: 20px auto;
     padding: 0 16px;
-
     display: flex;
-    justify-content: space-between;
     flex-direction: column;
 
-    h1{
+    h1 {
         color: var(--white);
     }
 }
 
-.containerHeader{
+.containerHeader {
     display: flex;
     align-items: center;
-    margin-bottom: 16px;
-    margin-top: 24px;
+    margin: 24px 0 16px;
     gap: 14px;
 
-    button{
+    button {
         background: transparent;
         border: 0;
-
     }
 }
 
-.popularGames{
+.popularGames {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 16px;
+}
+
+.jogoItem {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-
-}
-
-.jogosItem{
-    display: flex;
-    background-color: var(--dark-900);
     align-items: center;
-    border: 0;
-    font-size: 18px;
+    background-color: var(--dark-900);
     border-radius: 8px;
     color: var(--white);
-    transition: all 0.5s;
+    text-align: center;
+    padding: 12px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
 
-    &:hover{
-        filter: brightness(1.30);
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
     }
-}
 
-.tag{
-    width: 9px;
-    height: 60px;
-    background-color: var(--green-900);
-    border-radius: 6px 0 0 6px;
-    margin-right: 16px;
+    img {
+        width: 100%;
+        height: auto;
+        border-radius: 8px;
+        margin-bottom: 8px;
+    }
+
+    span {
+        font-size: 16px;
+        font-weight: bold;
+        color: var(--white);
+    }
 }

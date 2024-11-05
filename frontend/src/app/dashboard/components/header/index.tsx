@@ -30,8 +30,9 @@ export function Header(){
                         quality={100}
                     />
                 </Link>
-
-                <nav>
+                
+                {/* sepa pode excluir esse category */}
+                <nav> 
                     <Link href="dashboard/category">
                         Categoria
                     </Link>
