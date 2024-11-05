@@ -24,7 +24,7 @@ export async function Jogos() {
     return (
         <main className={styles.container}>
             <section className={styles.containerHeader}>
-                <h1>Exemplo de jogos:  </h1>
+                <h1>Lista de jogos: </h1>
                 <button>
                     <RefreshCw size={24} color="#3fffa3" />
                 </button>
@@ -32,7 +32,7 @@ export async function Jogos() {
 
             <section className={styles.popularGames}>
                 {popularGames.map((game) => (
-                    <Link key={game.steam_appid} href={`/jogos/${game.steam_appid}`}>
+                    <Link key={game.steam_appid} href={`/jogosDetalhes?appid=${game.steam_appid}`}>
                         <div className={styles.jogoItem}>
                             <img src={game.header_image} alt={game.name} className={styles.gameImage} />
                             <span>{game.name}</span>
