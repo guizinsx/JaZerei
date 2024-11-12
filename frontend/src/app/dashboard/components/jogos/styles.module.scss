@@ -28,6 +28,30 @@
     gap: 16px;
 }
 
+/* styles.module.scss */
+.searchButton {
+    font-size: 1.5rem;  
+    padding: 1rem 2rem; 
+    background-color: #ff5722; 
+    color: #ffffff;
+    border: none;
+    border-radius: 8px; 
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.searchButton:hover {
+    background-color: #e64a19; 
+    transform: scale(1.05); 
+}
+
+.searchButton:active {
+    background-color: #d84315; 
+    transform: scale(0.98);
+}
+
+
 .jogoItem {
     display: flex;
     flex-direction: column;

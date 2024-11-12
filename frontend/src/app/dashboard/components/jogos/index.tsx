@@ -1,8 +1,7 @@
-import styles from './styles.module.scss'
-import { RefreshCw } from 'lucide-react'
-import { api } from '@/services/api'
-import { getCookieServer } from '@/lib/cookieServer'
-import Link from 'next/link'
+import styles from './styles.module.scss';
+import { api } from '@/services/api';
+import { getCookieServer } from '@/lib/cookieServer';
+import Link from 'next/link';
 
 interface Game {
     steam_appid: number;
@@ -10,13 +9,17 @@ interface Game {
     header_image: string;
 }
 
-export async function Jogos() {
+export default async function Jogos() {
     const token = await getCookieServer();
+
+    if (!token) {
+        throw new Error("Token de autenticação ausente");
+    }
 
     const response = await api.get("/popular-games", {
         headers: {
-            Authorization: `Bearer ${token}`
-        }
+            Authorization: `Bearer ${token}`,
+        },
     });
 
     const popularGames: Game[] = response.data;
@@ -24,10 +27,10 @@ export async function Jogos() {
     return (
         <main className={styles.container}>
             <section className={styles.containerHeader}>
-                <h1>Lista de jogos: </h1>
-                <button>
-                    <RefreshCw size={24} color="#3fffa3" />
-                </button>
+                <h1>Lista de jogos:</h1>
+                <Link href="/dashboard/pesquisa">
+                    <button className={styles.searchButton}>Clique aqui para pesquisar qualquer jogo</button>
+                </Link>
             </section>
 
             <section className={styles.popularGames}>
