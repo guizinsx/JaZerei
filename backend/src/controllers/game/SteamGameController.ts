@@ -49,23 +49,32 @@ class SteamGameController {
     }
 
     async searchGames(req: Request, res: Response) {
-        const { query } = req.query as { query: string }; 
+    const { query } = req.query as { query: string }; 
     
-        if (!query || query.length < 3) {
-            return res.status(400).json({ error: "Search term must be at least 3 characters." });
-        }
-    
-        try {
-            const games = await SteamApiService.fetchGameList();
-            const filteredGames = games.filter(game =>
-                game.name.toLowerCase().includes(query.toLowerCase())
-            );
-            return res.json(filteredGames);
-        } catch (error) {
-            console.error(error);
-            return res.status(500).json({ error: "Error searching Steam games.", details: error.message });
-        }
+    console.log("Query recebida:", query);
+
+    if (!query || query.length < 3) {
+        console.error("Erro: termo de busca muito curto.");
+        return res.status(400).json({ error: "Search term must be at least 3 characters." });
     }
+    
+    try {
+        console.log("Chamando fetchGameList para buscar jogos...");
+        const games = await SteamApiService.fetchGameList();
+        console.log(`Total de jogos retornados: ${games.length}`);
+        
+        const filteredGames = games.filter(game =>
+            game.name.toLowerCase().includes(query.toLowerCase())
+        );
+        console.log(`Total de jogos após filtro: ${filteredGames.length}`);
+        
+        return res.json(filteredGames);
+    } catch (error) {
+        console.error("Erro ao buscar jogos:", error.message);
+        return res.status(500).json({ error: "Error searching Steam games.", details: error.message });
+    }
+}
+
 }
 
 export { SteamGameController };
