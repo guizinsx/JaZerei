@@ -6,7 +6,7 @@ import { api } from "@/services/api";
 import styles from "./styles.module.scss";
 
 interface UserProfile {
-    name: string;
+    username: string;
     email: string;
 }
 
@@ -29,13 +29,13 @@ export default function MeuPerfil() {
             try {
                 const token = Cookies.get("session");
                 if (!token) throw new Error("Token de autenticação não encontrado.");
-
-                const response = await api.get("/user/profile", {
+        
+                const response = await api.get("/me", {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
                 });
-
+        
                 setUser(response.data);
             } catch (err: any) {
                 console.error("Erro ao buscar dados do usuário:", err.message);
@@ -90,7 +90,7 @@ export default function MeuPerfil() {
 
             {user ? (
                 <section className={styles.profileDetails}>
-                    <p><strong>Nome:</strong> {user.name}</p>
+                    <p><strong>Nome:</strong> {user.username}</p>
                     <p><strong>Email:</strong> {user.email}</p>
                 </section>
             ) : (

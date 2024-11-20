@@ -1,4 +1,4 @@
-"use client"; // Marca este arquivo como Client Component
+"use client"; 
 
 import { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
@@ -92,7 +92,7 @@ export default function JogosDetalhes({ searchParams }: JogosDetalhesProps) {
                     <option value="zerando">Zerando</option>
                     <option value="zerado">Zerado</option>
                     <option value="largado">Largado</option>
-                    <option value="pretendo_jogar">Pretendo jogar</option>
+                    <option value="pretendo jogar">Pretendo jogar</option>
                     <option value="Não tem modo história">Não tem modo história</option>
                 </select>
                 <p>Status Atual: {gameState[appid] || 'Nenhum'}</p>
