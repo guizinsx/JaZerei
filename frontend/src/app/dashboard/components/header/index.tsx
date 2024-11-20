@@ -31,12 +31,8 @@ export function Header(){
                     />
                 </Link>
                 
-                {/* sepa pode excluir esse category */}
                 <nav> 
-                    <Link href="dashboard/category">
-                        Categoria
-                    </Link>
-                    <Link href="dashboard/perfil">
+                    <Link href="/dashboard/perfil">
                         Meu perfil
                     </Link>
 
